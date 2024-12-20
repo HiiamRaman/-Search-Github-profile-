@@ -1,5 +1,8 @@
-// import { useEffect, useState } from "react";
-// import React from 'react';
+//Use This code if you want to fetch data automatically for this to happen we use UseEffect hook
+
+
+//   import { useEffect, useState } from "react";
+// import React from 'react'
 // import User from './user.jsx'
 // export default function Github() {
 //   const [username, setUserName] = useState("HiiamRaman");
@@ -23,7 +26,7 @@
   
 
 //   function handleSubmit() {
-   
+//     fetchgithubData();
 //   }
 //   useEffect(() => {
 //     fetchgithubData();
@@ -43,7 +46,7 @@
 //           onChange={(event) =>setUserName(event.target.value)
 //           }
 //         />
-//         <button onClick={handleSubmit}>Search</button>
+//         <button onClick={handleSubmit}>Search here </button>
 //       </div>
 //       {
 //         userdata!==null? < User user={userdata} /> :null
@@ -51,7 +54,8 @@
 //     </div>
 //   );
 // }
-import { useEffect, useState } from "react";
+   
+import { useState, useEffect } from "react";
 import React from 'react';
 import User from './user.jsx';
 
@@ -60,28 +64,27 @@ export default function Github() {
   const [userdata, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Function to fetch GitHub user data
-  async function fetchGithubData() {
+  
+  async function fetchgithubData() {
     setLoading(true);
     const resp = await fetch(`https://api.github.com/users/${username}`);
     const data = await resp.json();
 
-    if (resp.ok) {
-      setUserData(data);
-    } else {
-      setUserData(null); // Clear user data if the user does not exist
-    }
+    console.log(data);
 
-    setLoading(false);
+    if (data) {
+      setUserData(data);
+      setLoading(false);
+    }
   }
 
-  useEffect(() => {
-    fetchGithubData();
-  }, [username]);
+  // Trigger API call manually when button is clicked
+  function handleSubmit() {
+    fetchgithubData();
+  }
 
-  // Display loading state
   if (loading) {
-    return <h1>Loading data...</h1>;
+    return <h1>Please Wait, Data is Loading...</h1>;
   }
 
   return (
@@ -92,13 +95,11 @@ export default function Github() {
           type="text"
           placeholder="Search GitHub profile"
           value={username}
-          onChange={(event) => setUserName(event.target.value)}
+          onChange={(event) => setUserName(event.target.value)} 
         />
-        <button onClick={fetchGithubData}>Search</button>
+        <button onClick={handleSubmit}>Search here</button>
       </div>
-
-      {/* Display user data if available */}
-      {userdata ? <User user={userdata} /> : <h2>User not found</h2>}
+      {userdata !== null ? <User user={userdata} /> : null}
     </div>
   );
 }
